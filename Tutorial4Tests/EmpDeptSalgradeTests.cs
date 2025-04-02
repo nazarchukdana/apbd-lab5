@@ -58,7 +58,7 @@ public class EmpDeptSalgradeTests
     {
         var emps = Database.GetEmps();
 
-        var result = emps.Select(e => new {e.EName, e.Sal}).ToList(); 
+        var result = emps.Select(e => new {e.EName, e.Sal}); 
         
          Assert.All(result, r =>
          {
@@ -89,8 +89,7 @@ public class EmpDeptSalgradeTests
         var emps = Database.GetEmps();
 
         var result = emps.GroupBy(e => e.DeptNo).
-            Select( g => new {DeptNo = g.Key, Count = g.Count()})
-            .ToList(); 
+            Select( g => new {DeptNo = g.Key, Count = g.Count()}); 
         
         Assert.Contains(result, g => g.DeptNo == 30 && g.Count == 2);
     }
@@ -103,7 +102,7 @@ public class EmpDeptSalgradeTests
         var emps = Database.GetEmps();
 
         var result = emps.Where( e => e.Comm != null) 
-            .Select(e => new {e.EName, e.Comm}).ToList(); 
+            .Select(e => new {e.EName, e.Comm}); 
         
         Assert.All(result, r => Assert.NotNull(r.Comm));
     }
@@ -116,12 +115,11 @@ public class EmpDeptSalgradeTests
         var emps = Database.GetEmps();
         var grades = Database.GetSalgrades();
 
-        var result = (
+        var result = 
             from e in emps
             from s in grades
             where e.Sal >= s.Losal && e.Sal <= s.Hisal
-                select new {e.EName, s.Grade}
-                ).ToList();
+                select new {e.EName, s.Grade};
         
         Assert.Contains(result, r => r.EName == "ALLEN" && r.Grade == 3);
     }
@@ -134,7 +132,7 @@ public class EmpDeptSalgradeTests
         var emps = Database.GetEmps();
 
         var result = emps.GroupBy(e => e.DeptNo).
-            Select(g => new {DeptNo = g.Key, AvgSal = g.Average(e => e.Sal)}).ToList(); 
+            Select(g => new {DeptNo = g.Key, AvgSal = g.Average(e => e.Sal)}); 
         
         Assert.Contains(result, r => r.DeptNo == 30 && r.AvgSal > 1000);
     }
@@ -146,13 +144,13 @@ public class EmpDeptSalgradeTests
     {
         var emps = Database.GetEmps();
 
-        var result = (
+        var result = 
             from e in emps
             where e.Sal > (
                 from e1 in emps
                 where e1.DeptNo == e.DeptNo
                     select e1.Sal).Average()
-             select e.EName).ToList(); 
+             select e.EName; 
         
         Assert.Contains("ALLEN", result);
     }

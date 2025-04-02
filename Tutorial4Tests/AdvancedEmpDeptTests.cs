@@ -46,7 +46,7 @@ public class AdvancedEmpDeptTests
     {
         var emps = Database.GetEmps();
 
-        var jobs = emps.Select(e => e.Job).Distinct().ToList(); 
+        var jobs = emps.Select(e => e.Job).Distinct(); 
         
         Assert.Contains("PRESIDENT", jobs);
         Assert.Contains("SALESMAN", jobs);
@@ -59,7 +59,7 @@ public class AdvancedEmpDeptTests
     {
         var emps = Database.GetEmps();
 
-        var withMgr = emps.Where(e => e.Mgr != null).ToList(); 
+        var withMgr = emps.Where(e => e.Mgr != null); 
         
         Assert.All(withMgr, e => Assert.NotNull(e.Mgr));
     }
@@ -95,9 +95,9 @@ public class AdvancedEmpDeptTests
     {
         var emps = Database.GetEmps();
 
-        var result = (from e1 in emps
+        var result = from e1 in emps
             join e2 in emps on e1.Mgr equals e2.EmpNo
-            select new { Employee = e1.EName, Manager = e2.EName }).ToList();
+            select new { Employee = e1.EName, Manager = e2.EName };
         
         Assert.Contains(result, r => r.Employee == "SMITH" && r.Manager == "FORD");
     }
@@ -109,7 +109,7 @@ public class AdvancedEmpDeptTests
     {
         var emps = Database.GetEmps();
 
-        var result = emps.Select(e => new {e.EName, Total = e.Sal + (e.Comm ?? 0)}).ToList(); 
+        var result = emps.Select(e => new {e.EName, Total = e.Sal + (e.Comm ?? 0)}); 
         
         Assert.Contains(result, r => r.EName == "ALLEN" && r.Total == 1900);
     }
@@ -123,11 +123,11 @@ public class AdvancedEmpDeptTests
         var depts = Database.GetDepts();
         var grades = Database.GetSalgrades();
 
-        var result = (from e in emps
+        var result = from e in emps
             join d in depts on e.DeptNo equals d.DeptNo
             from s in grades
             where e.Sal >= s.Losal && e.Sal <= s.Hisal
-            select new { e.EName, d.DName, s.Grade }).ToList();
+            select new { e.EName, d.DName, s.Grade };
         
         Assert.Contains(result, r => r.EName == "ALLEN" && r.DName == "SALES" && r.Grade == 3);
     }
